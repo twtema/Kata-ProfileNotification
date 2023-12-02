@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class KafkaMessageSender {
+
+    private final NotificationSender notificationSender;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${kafka.topic.create}")
@@ -28,7 +30,10 @@ public class KafkaMessageSender {
 
         kafkaTemplate.send(kafkaTopic, message);
 
+        notificationSender.sendNotification(message);
+
         log.info("В топик: {} для пользователя с icp: {} отправлен код подтверждения", kafkaTopic, dto.getIcp());
+
     }
 
     private String generateConfirmationCode() {
