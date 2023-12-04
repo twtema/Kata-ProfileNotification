@@ -2,6 +2,7 @@ package org.kata.bot;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.kata.exception.NotificationBotException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -29,10 +30,8 @@ public class NotificationBot extends TelegramLongPollingBot {
         if (message.equals(START)) {
             String userName = update.getMessage().getChat().getUserName();
             startChat(chatId, userName);
-            System.out.println(chatId);
         } else {
             sendText(chatId, "Sorry, the message is not supported");
-            System.out.println(chatId);
         }
     }
 
@@ -57,7 +56,7 @@ public class NotificationBot extends TelegramLongPollingBot {
         try {
             execute(sm);                        //Actually sending the message
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);      //Any error will be printed here
+            throw new NotificationBotException(e.getMessage());      //Any error will be printed here
         }
     }
 }
