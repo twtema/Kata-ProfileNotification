@@ -15,8 +15,9 @@ public class KafkaConsumerService {
 
     private final ObjectMapper objectMapper;
 
-
-    @KafkaListener(topics = "contact-update-topic", groupId = "profile-notification-group")
+    @KafkaListener(topics = "${kafka.topic.listen}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "filterKafkaListenerContainerFactory")
     public void listenContactChange(String message) throws JsonProcessingException {
 
         UpdateContactMessage dto = objectMapper.readValue(message, UpdateContactMessage.class);
