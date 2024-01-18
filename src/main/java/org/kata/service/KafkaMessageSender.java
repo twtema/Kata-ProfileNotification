@@ -3,7 +3,6 @@ package org.kata.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kata.dto.ContactChangeMessage;
-import org.kata.dto.DocumentMessage;
 import org.kata.dto.individual.DocumentDto;
 import org.kata.dto.UpdateContactMessage;
 import org.springframework.beans.factory.annotation.Value;

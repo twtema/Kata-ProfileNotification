@@ -3,10 +3,6 @@ package org.kata.config;
 import lombok.NoArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.listener.adapter.RecordFilterStrategy;
-import org.springframework.kafka.support.converter.RecordMessageConverter;
-import org.springframework.kafka.support.converter.StringJsonMessageConverter;
-import org.springframework.kafka.support.mapping.DefaultJackson2JavaTypeMapper;
-import org.springframework.kafka.support.mapping.Jackson2JavaTypeMapper;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -32,7 +28,6 @@ public class KafkaConsumerConfig {
 
     private final int expirationTime = 15 * 60 * 1000;
     private final long documentSendTime = 7 * 24 * 60 * 60 * 1000;
-   // private final long documentSendTime = 4 * 24 * 60 * 60 * 1000;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
