@@ -24,4 +24,7 @@ public class DocumentDto {
     private Date expirationDate;
 
     private boolean actual;
+
+    public DocumentDto(String number, DocumentType documentType, String number1, String number2, Date date, Date date1, boolean b) {
+    }
 }

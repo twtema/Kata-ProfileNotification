@@ -1,7 +1,6 @@
 package org.kata.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.kata.dto.enums.GenderType;
 import org.kata.dto.individual.*;
 

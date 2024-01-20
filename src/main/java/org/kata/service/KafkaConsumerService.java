@@ -2,10 +2,11 @@ package org.kata.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.kata.dto.individual.DocumentDto;
 import org.kata.dto.IndividualDto;
 import org.kata.dto.UpdateContactMessage;
+import org.kata.dto.individual.DocumentDto;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.PartitionOffset;
 import org.springframework.kafka.annotation.TopicPartition;
@@ -15,11 +16,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Data
 public class KafkaConsumerService {
 
     private final KafkaMessageSender kafkaMessageSender;
 
     private final ObjectMapper objectMapper;
+
+    private List<DocumentDto> documentDto;
 
     @KafkaListener(topics = "${kafka.topic1.listen}",
             groupId = "${spring.kafka.consumer1.group-id}",
@@ -38,10 +42,9 @@ public class KafkaConsumerService {
                     partitionOffsets = @PartitionOffset(partition = "0", initialOffset = "83"))},
             groupId = "${spring.kafka.consumer2.group-id}",
             containerFactory = "filterKafkaListenerContainerFactoryObject")
-    public void listenIndividual(IndividualDto message) throws JsonProcessingException {
-        List<DocumentDto> documentDto = message.getDocuments();
+    public void listenIndividual(IndividualDto message) {
+        documentDto = message.getDocuments();
         kafkaMessageSender.forseUpdate(documentDto);
-        System.out.println(documentDto.toString());
     }
 
 }
