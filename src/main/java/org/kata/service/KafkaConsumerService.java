@@ -2,7 +2,6 @@ package org.kata.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.kata.dto.IndividualDto;
 import org.kata.dto.UpdateContactMessage;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-@Data
 public class KafkaConsumerService {
 
     private final KafkaMessageSender kafkaMessageSender;
@@ -47,4 +44,11 @@ public class KafkaConsumerService {
         kafkaMessageSender.forseUpdate(documentDto);
     }
 
+    @KafkaListener(topics = "${kafka.topic3.listen}")
+    public void sendToNewIndividual(String message) throws JsonProcessingException {
+
+        IndividualDto dto = objectMapper.readValue(message, IndividualDto.class);
+
+        kafkaMessageSender.sendToNewIndividual(dto);
+    }
 }
