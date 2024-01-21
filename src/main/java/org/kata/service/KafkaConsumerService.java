@@ -23,7 +23,5 @@ public class KafkaConsumerService {
         UpdateContactMessage dto = objectMapper.readValue(message, UpdateContactMessage.class);
 
         kafkaMessageSender.sendContactChangeNotification(dto);
-
     }
-
 }
