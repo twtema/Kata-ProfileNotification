@@ -5,9 +5,14 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.kata.dto.IndividualDto;
 import org.kata.dto.individual.DocumentDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,43 +29,48 @@ import java.util.Map;
 
 @SpringBootTest
 @DirtiesContext
+@ExtendWith(MockitoExtension.class)
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 class KafkaConsumerServiceTest {
 
-    @Autowired
+    public static long TIME_STAMP = 7 * 24 * 60 * 60 * 1000;
+
+    public static ProducerFactory<String, Object> producerFactory;
+
+    public static KafkaTemplate<String, Object> kafkaTemplate;
+
+    public static ProducerRecord<String, Object> producerRecord;
+
+    @InjectMocks
     KafkaConsumerService service;
 
-    @Autowired
+    @Mock
     ObjectMapper objectMapper;
 
-    @Test
-    void listenTopic() throws IOException {
-
-        List<DocumentDto> documentList = service.getDocumentDto();
-
-        kafkaTemplate().send(producerRecord());
-        Assertions.assertEquals(documentList, service.getDocumentDto());
-
-    }
-
-    public ProducerFactory<String, Object> getProducer() {
+    @BeforeEach
+    void producerConfig() throws IOException {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(props);
-    }
+        producerFactory = new DefaultKafkaProducerFactory<>(props);
 
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(getProducer());
-    }
+        kafkaTemplate = new KafkaTemplate<>(producerFactory);
 
-    public ProducerRecord<String, Object> producerRecord() throws IOException {
-        long timestamp = 7 * 24 * 60 * 60 * 1000;
         File individualFile = new File("src/test/resources/individual.json");
-        Object individual = objectMapper.readValue(individualFile, Object.class);
+        IndividualDto individual = objectMapper.readValue(individualFile, IndividualDto.class);
 
-        return new ProducerRecord<>("createIndividual", 0, (System.currentTimeMillis() - timestamp), "message", individual);
+        producerRecord = new ProducerRecord<>("createIndividual", 0, (System.currentTimeMillis() - TIME_STAMP), "message", (Object) individual);
+    }
+
+    @Test
+    void listenTopic() {
+
+        List<DocumentDto> documentList = service.getDocumentDto();
+
+        kafkaTemplate.send(producerRecord);
+        Assertions.assertEquals(documentList, service.getDocumentDto());
+
     }
 
 }
