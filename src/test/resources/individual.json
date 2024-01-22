@@ -1,0 +1,56 @@
+{
+  "icp": "1234552380",
+  "name": "Дейл",
+  "surname": "Стивенс",
+  "patronymic": "Иванович",
+  "fullName": "Стивенс Дейл Иванович",
+  "gender": "MALE",
+  "placeOfBirth": "Москва",
+  "countryOfBirth": "Россия",
+  "birthDate": "2024-01-20T09:42:33.727Z",
+  "documents": [
+    {
+      "icp": "1234552380",
+      "documentType": "RF_PASSPORT",
+      "documentNumber": "490560",
+      "documentSerial": "1329",
+      "issueDate": "2024-01-20T09:42:33.727Z",
+      "expirationDate": "2024-01-20T09:42:33.727Z",
+      "actual": true
+    }
+  ],
+  "contacts": [
+    {
+      "icp": "1234552380",
+      "type": "EMAIL",
+      "value": "example@mail.ru/+7-666-555-44-33"
+    }
+  ],
+  "address": [
+    {
+      "icp": "1234552380",
+      "street": "Пушкина",
+      "city": "Москва",
+      "state": "Российская Федерация",
+      "postCode": "101000",
+      "country": "Россия"
+    }
+  ],
+  "avatar": [
+    {
+      "icp": "1234552380",
+      "filename": "имя файла",
+      "imageData": [
+        "string"
+      ]
+    }
+  ],
+  "wallet": [
+    {
+      "icp": "1234552380",
+      "walletId": "1234567890",
+      "currencyType": "BYN",
+      "balance": 123.45
+    }
+  ]
+}
