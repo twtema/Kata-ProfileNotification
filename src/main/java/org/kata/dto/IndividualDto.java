@@ -1,6 +1,7 @@
 package org.kata.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.kata.dto.enums.GenderType;
 import org.kata.dto.individual.*;
 
@@ -8,7 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class IndividualDto {
+
     private String icp;
 
     private String name;
@@ -37,3 +40,4 @@ public class IndividualDto {
 
     private List<WalletDto> wallet;
 }
+

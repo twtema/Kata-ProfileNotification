@@ -47,4 +47,11 @@ public class KafkaConsumerService {
         kafkaMessageSender.forseUpdate(documentDto);
     }
 
+    @KafkaListener(topics = "${kafka.topic2.listen}", groupId = "${spring.kafka.consumer1.group-id}")
+    public void sendToNewIndividual(String message) throws JsonProcessingException {
+
+        IndividualDto dto = objectMapper.readValue(message, IndividualDto.class);
+
+        kafkaMessageSender.sendToNewIndividual(dto);
+    }
 }
