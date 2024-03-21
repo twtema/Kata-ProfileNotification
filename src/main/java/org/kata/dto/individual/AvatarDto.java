@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AvatarDto {
 
+    private String conversationId;
+
     private String icp;
 
     private String filename;

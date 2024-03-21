@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class WalletDto {
 
+    private String conversationId;
+
     private String icp;
 
     private String walletId;

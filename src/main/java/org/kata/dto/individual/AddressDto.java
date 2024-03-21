@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddressDto {
 
+    private String conversationId;
+
     private String icp;
 
     private String street;

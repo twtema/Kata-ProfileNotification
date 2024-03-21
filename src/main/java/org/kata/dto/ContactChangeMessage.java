@@ -9,6 +9,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class ContactChangeMessage {
 
+    private String conversationId;
     private String icp;
     private String oldContactValue;
     private String newContactValue;

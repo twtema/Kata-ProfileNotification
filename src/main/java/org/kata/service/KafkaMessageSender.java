@@ -35,24 +35,28 @@ public class KafkaMessageSender {
 
     public void sendContactChangeNotification(UpdateContactMessage dto) {
         ContactChangeMessage message = ContactChangeMessage.builder()
+                .conversationId(dto.getConversationId())
                 .icp(dto.getIcp())
                 .oldContactValue(dto.getOldContactValue())
                 .newContactValue(dto.getNewContactValue())
                 .confirmationCode(generateConfirmationCode())
                 .build();
 
+
         ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(kafkaTopic, message);
+
+        log.info("Conversation ID: {} Отправлено в топик: {} для пользователя с icp: {}", dto.getConversationId(), kafkaTopic, dto.getIcp());
 
         future.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onFailure(Throwable ex) {
-                log.error("Не удалось отправить в топик:{}, \n{}", kafkaTopic, ex.getMessage());
+                log.error("Conversation ID: {} Не удалось отправить в топик:{}, \n{}", dto.getConversationId(), kafkaTopic, ex.getMessage());
             }
 
             @Override
             public void onSuccess(SendResult<String, Object> result) {
                 notificationSender.sendNotification(message);
-                log.info("В топик: {} для пользователя с icp: {} отправлен код подтверждения", kafkaTopic, dto.getIcp());
+                log.info("Conversation ID: {} В топик: {} для пользователя с icp: {} отправлен код подтверждения", dto.getConversationId(), kafkaTopic, dto.getIcp());
             }
         });
     }
@@ -64,12 +68,13 @@ public class KafkaMessageSender {
     public void forseUpdate(List<DocumentDto> documentDto) {
         kafkaTemplate.send(kafkaDocumentsTopic, documentDto);
 
-        log.info("Document send to topic: {}", kafkaDocumentsTopic);
+        log.info("Conversation ID: {} Document send to topic: {} для пользователя с icp: {}", documentDto.get(0).getConversationId(), kafkaDocumentsTopic, documentDto.get(0).getIcp());
     }
 
     public void sendToNewIndividual(IndividualDto dto) {
         log.debug("Получено dto с icp: {}", dto.getIcp());
         NewIndividualMessage message = NewIndividualMessage.builder()
+                .conversationId(dto.getConversationId())
                 .icp(dto.getIcp())
                 .name(dto.getName())
                 .surname(dto.getSurname())
@@ -82,15 +87,17 @@ public class KafkaMessageSender {
                 .build();
 
         ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(kafkaNewIndividualTopic, message);
+
+        log.info("Conversation ID: {} Отправлено в топик: {} для пользователя с icp: {}", dto.getConversationId(), kafkaNewIndividualTopic, dto.getIcp());
         future.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onFailure(Throwable ex) {
-                log.error("Не удалось отправить в топик:{}, \n{}", kafkaNewIndividualTopic, ex.getMessage());
+                log.error("Conversation ID: {} Не удалось отправить в топик:{} для пользователя с icp: {}, \n{}", dto.getConversationId(), kafkaNewIndividualTopic, dto.getIcp(), ex.getMessage());
             }
 
             @Override
             public void onSuccess(SendResult<String, Object> result) {
-                log.info("В топик: {} для пользователя с icp: {} отправлены name, surname, patronymic, list of phone numbers",
+                log.info("Conversation ID: {} В топик: {} для пользователя с icp: {} отправлены name, surname, patronymic, list of phone numbers", dto.getConversationId(),
                         kafkaNewIndividualTopic, dto.getIcp());
             }
         });

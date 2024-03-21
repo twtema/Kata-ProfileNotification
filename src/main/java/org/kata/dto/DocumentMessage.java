@@ -9,6 +9,9 @@ import java.util.Date;
 @Data
 @Builder
 public class DocumentMessage {
+
+    private String conversationId;
+
     private String icp;
 
     private DocumentType documentType;

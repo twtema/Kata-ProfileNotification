@@ -11,6 +11,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class DocumentDto {
 
+    private String conversationId;
+
     private String icp;
 
     private DocumentType documentType;

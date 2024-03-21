@@ -11,6 +11,8 @@ import java.util.List;
 @Jacksonized
 public class NewIndividualMessage {
 
+    private String conversationId;
+
     private String icp;
 
     private String name;

@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class IndividualDto {
 
+    private String conversationId;
+
     private String icp;
 
     private String name;

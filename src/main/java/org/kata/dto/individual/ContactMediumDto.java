@@ -8,6 +8,8 @@ import org.kata.dto.enums.ContactMediumType;
 @NoArgsConstructor
 public class ContactMediumDto {
 
+    private String conversationId;
+
     private String icp;
 
     private ContactMediumType type;
